@@ -2,7 +2,7 @@
 
 Backend для дипломного проекта News Explorer (Yandex.Praktikum).
 
-Обратиться к серверу можно по адресу: [https://mygeneralnews.tk/](https://mygeneralnews.tk/)
+Обратиться к серверу можно по адресу: [https://api.mygeneralnews.tk/](https://api.mygeneralnews.tk/)
 
 - [Описание](#Описание)
 - [Технологии проекта](#Технологии-проекта)
