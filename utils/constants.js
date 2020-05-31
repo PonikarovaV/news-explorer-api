@@ -9,6 +9,8 @@ module.exports.VALIDATION_ERRORS = {
 
 module.exports.CLIENT_ERRORS = {
   notFoundError: 'Ресурс не найден.',
+  notFoundUserError: 'Пользователь не найден.',
+  notFoundArticleError: 'Статья не найдена.',
   unauthorizedError: 'Пожалуйста, пройдите авторизацию.',
   forbiddenToDeleteCardError: 'Вы не можете удалить карточку другого пользователя.'
 };

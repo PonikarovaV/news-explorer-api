@@ -39,7 +39,7 @@ module.exports.createArticle = (req, res, next) => {
 
 module.exports.deleteArticle = (req, res, next) => {
   Article.findById(req.params.articleId)
-    .orFail(() => new NotFoundError(CLIENT_ERRORS.notFoundError))
+    .orFail(() => new NotFoundError(CLIENT_ERRORS.notFoundArticleError))
     .then((article) => {
       if (String(article.owner) !== String(req.user._id)) {
         throw new ForbiddenError(CLIENT_ERRORS.forbiddenToDeleteCardError);

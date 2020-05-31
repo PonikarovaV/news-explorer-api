@@ -57,7 +57,7 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.getUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(() => new NotFoundError(CLIENT_ERRORS.notFoundError))
+    .orFail(() => new NotFoundError(CLIENT_ERRORS.notFoundUserError))
     .then((user) => res.send({ data: user }))
     .catch(next);
 };
