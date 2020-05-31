@@ -1,46 +1,47 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
+const { VALIDATION_ERRORS } = require('../utils/constants');
+const { isURL } = require('../validation/validator');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
     type: String,
-    required: [true, 'Наличие ключевого слова - обязательно.']
+    required: [true, VALIDATION_ERRORS.textSchemaError]
   },
   title: {
     type: String,
-    required: [true, 'Наличие заголовка статьи - обязательно.']
+    required: [true, VALIDATION_ERRORS.textSchemaError]
   },
   text: {
     type: String,
-    required: [true, 'Наличие текста статьи - обязательно.']
+    required: [true, VALIDATION_ERRORS.textSchemaError]
   },
   date: {
     type: String,
-    required: [true, 'Наличие даты статьи - обязательно.']
+    required: [true, VALIDATION_ERRORS.textSchemaError]
   },
   source: {
     type: String,
-    required: [true, 'Указание источника статьи - обязательно.']
+    required: [true, VALIDATION_ERRORS.textSchemaError]
   },
   link: {
     type: String,
     validate: {
-      validator(string) {
-        return validator.isURL(string);
+      validator(data) {
+        return isURL(data);
       },
-      message: () => 'Ссылка на статью должна быть корректной.'
+      message: () => VALIDATION_ERRORS.linkSchemaError
     },
-    required: [true, 'Ссылка на статью - обязаельна.']
+    required: [true, VALIDATION_ERRORS.linkSchemaError]
   },
   image: {
     type: String,
     validate: {
-      validator(string) {
-        return validator.isURL(string);
+      validator(data) {
+        return isURL(data);
       },
-      message: () => 'Ссылка на иллюстрацию к статье должна быть корректной.'
+      message: () => VALIDATION_ERRORS.linkSchemaError
     },
-    required: [true, 'Иллюстрация к статье - обязаельна.']
+    required: [true, VALIDATION_ERRORS.linkSchemaError]
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -53,4 +54,4 @@ const articleSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('card', articleSchema);
+module.exports = mongoose.model('article', articleSchema);

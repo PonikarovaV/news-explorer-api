@@ -1,6 +1,7 @@
 const Article = require('../models/article');
 const NotFoundError = require('../errors/not-found-error');
 const ForbiddenError = require('../errors/forbidden-error');
+const { CLIENT_ERRORS } = require('../utils/constants');
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({})
@@ -32,20 +33,20 @@ module.exports.createArticle = (req, res, next) => {
     image,
     owner: _id
   })
-    .then((card) => res.send({ data: card }))
+    .then((article) => res.send({ data: article }))
     .catch(next);
 };
 
 module.exports.deleteArticle = (req, res, next) => {
-  Article.findById(req.params.cardId)
-    .orFail(() => new NotFoundError(`Карточка с id ${req.params.cardId} не найдена.`))
-    .then((card) => {
-      if (String(card.owner) !== String(req.user._id)) {
-        throw new ForbiddenError('Вы не можете удалить карточку.');
+  Article.findById(req.params.articleId)
+    .orFail(() => new NotFoundError(CLIENT_ERRORS.notFoundError))
+    .then((article) => {
+      if (String(article.owner) !== String(req.user._id)) {
+        throw new ForbiddenError(CLIENT_ERRORS.forbiddenToDeleteCardError);
       } else {
-        Article.deleteOne(card)
+        Article.deleteOne(article)
           .then(() => {
-            res.send({ message: `Карточка с id ${req.params.cardId} успешно и безвозвратно удалена.` });
+            res.send({ article });
           });
       }
     })

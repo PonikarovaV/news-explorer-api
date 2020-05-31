@@ -1,30 +1,41 @@
 
 const express = require('express');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
+const { SERVER_ERRORS } = require('./utils/constants');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
 
 const {
   nameSchema,
-  // textSchema,
-  // linkSchema,
   emailSchema,
-  passwordSchema
+  passwordSchema,
+  emailAuthSchema,
+  passwordAuthSchema
 } = require('./validation/joi-validation');
 
-// const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { resource, errorMiddleware } = require('./middlewares/error-handler');
 const { createUser, login } = require('./controllers/users');
 const users = require('./routes/users');
 const articles = require('./routes/articles');
 const auth = require('./middlewares/auth');
 
-const mongoDB = process.env.MONGODB_URI || 'mongodb://localhost:27017/news-explorer';
-const port = process.env.PORT || 3000;
+const { MONGO_DB, SERV_PORT } = require('./utils/config');
 
 const app = express();
 
-// app.use(requestLogger);
+app.use(helmet());
+
+app.use(requestLogger);
+
+app.use(limiter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,8 +48,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
-    email: emailSchema,
-    password: passwordSchema
+    email: emailAuthSchema,
+    password: passwordAuthSchema
   })
 }), login);
 
@@ -54,23 +65,23 @@ app.use(auth);
 app.use('/users', users);
 app.use('/articles', articles);
 app.use(resource);
-// app.use(errorLogger);
+app.use(errorLogger);
 app.use(errors());
 app.use(errorMiddleware);
 
 
 async function start() {
   try {
-    await mongoose.connect(mongoDB, {
+    await mongoose.connect(MONGO_DB, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false
     });
-    app.listen(port, () => {
-      console.log(`Server started on port ${port}`);
+    app.listen(SERV_PORT, () => {
+      console.log(`Server started on port ${SERV_PORT}`);
     });
   } catch (err) {
-    throw new Error('Что-то пошло не так...');
+    throw new Error(SERVER_ERRORS.serverError);
   }
 }
 

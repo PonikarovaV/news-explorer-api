@@ -1,13 +1,15 @@
 const jwt = require('jsonwebtoken');
-const Unauthorized = require('../errors/unauthorized-error');
+const { KEY } = require('../utils/config');
 
-const key = process.env.JWT_SECRET || 'some-secret-key';
+const { CLIENT_ERRORS } = require('../utils/constants');
+
+const Unauthorized = require('../errors/unauthorized-error');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    next(new Unauthorized('Пожалуйста, пройдите авторизацию.'));
+    next(new Unauthorized(CLIENT_ERRORS.unauthorizedError));
   }
 
   const token = authorization.replace('Bearer ', '');
@@ -15,9 +17,9 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, key);
+    payload = jwt.verify(token, KEY);
   } catch (err) {
-    next(new Unauthorized('Пожалуйста, пройдите авторизацию.'));
+    next(new Unauthorized(CLIENT_ERRORS.unauthorizedError));
   }
 
   req.user = payload;

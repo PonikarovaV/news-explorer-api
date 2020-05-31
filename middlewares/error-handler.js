@@ -1,19 +1,28 @@
+const { VALIDATION_ERRORS, SERVER_ERRORS, CLIENT_ERRORS } = require('../utils/constants');
+
 module.exports.resource = (res, req, next) => {
-  next({ status: 404, message: 'Запрашиваемый ресурс не найден.' });
+  next({ status: 404, message: CLIENT_ERRORS.notFoundError });
 };
 
 module.exports.errorMiddleware = (err, req, res, next) => {
-  const { statusCode = 500, message } = err;
+  let { status = 500, message } = err;
 
-  console.log(err)
+  if (err.name === 'ValidationError') {
+    status = 400;
+  }
+
+  if (err.code === 11000) {
+    status = 400;
+    message = VALIDATION_ERRORS.emailIsNotUniqError;
+  }
 
   res
-    .status(statusCode)
+    .status(status)
     .send({
-      message: statusCode === 500
-        ? `На сервере произошла ошибка. Статус ошибки ${statusCode}.`
-        : `${message} Статус ошибки ${statusCode}.`
+      message: status === 500
+        ? `${SERVER_ERRORS.serverError} Статус ошибки ${status}.`
+        : `${message} Статус ошибки ${status}.`
     });
 
-  return next;
+  return next();
 };
