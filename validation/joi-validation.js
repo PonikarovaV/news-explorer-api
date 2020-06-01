@@ -1,5 +1,5 @@
 const { Joi } = require('celebrate');
-const { isURL } = require('../validation/validator');
+const { isURL } = require('./validator');
 
 const BadRequest = require('../errors/bad-request-error');
 

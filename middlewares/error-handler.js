@@ -12,7 +12,7 @@ module.exports.errorMiddleware = (err, req, res, next) => {
   }
 
   if (err.code === 11000) {
-    status = 400;
+    status = 409;
     message = VALIDATION_ERRORS.emailIsNotUniqError;
   }
 
@@ -21,7 +21,7 @@ module.exports.errorMiddleware = (err, req, res, next) => {
     .send({
       message: status === 500
         ? `${SERVER_ERRORS.serverError} Статус ошибки ${status}.`
-        : `${message} Статус ошибки ${status}.`
+        : `${message} Статус ошибки ${status}.`,
     });
 
   return next();

@@ -4,12 +4,12 @@ const { celebrate, Joi } = require('celebrate');
 const {
   getArticles,
   createArticle,
-  deleteArticle
+  deleteArticle,
 } = require('../controllers/articles');
 
 const {
   textSchema,
-  linkSchema
+  linkSchema,
 } = require('../validation/joi-validation');
 
 router.get('/', getArticles);
@@ -21,8 +21,8 @@ router.post('/', celebrate({
     date: textSchema,
     source: textSchema,
     link: linkSchema,
-    image: linkSchema
-  })
+    image: linkSchema,
+  }),
 }), createArticle);
 router.delete('/:articleId', deleteArticle);
 

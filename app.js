@@ -9,7 +9,7 @@ const { SERVER_ERRORS } = require('./utils/constants');
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100
+  max: 100,
 });
 
 const {
@@ -17,7 +17,7 @@ const {
   emailSchema,
   passwordSchema,
   emailAuthSchema,
-  passwordAuthSchema
+  passwordAuthSchema,
 } = require('./validation/joi-validation');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -43,16 +43,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: emailAuthSchema,
-    password: passwordAuthSchema
-  })
+    password: passwordAuthSchema,
+  }),
 }), login);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: emailSchema,
     password: passwordSchema,
-    name: nameSchema
-  })
+    name: nameSchema,
+  }),
 }), createUser);
 
 app.use(auth);
@@ -69,7 +69,7 @@ async function start() {
     await mongoose.connect(MONGO_DB, {
       useNewUrlParser: true,
       useCreateIndex: true,
-      useFindAndModify: false
+      useFindAndModify: false,
     });
     app.listen(SERV_PORT, () => {
       console.log(`Server started on port ${SERV_PORT}`);

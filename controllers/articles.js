@@ -18,7 +18,7 @@ module.exports.createArticle = (req, res, next) => {
     date,
     source,
     link,
-    image
+    image,
   } = req.body;
 
   const { _id } = req.user;
@@ -31,7 +31,7 @@ module.exports.createArticle = (req, res, next) => {
     source,
     link,
     image,
-    owner: _id
+    owner: _id,
   })
     .then((article) => res.send({ data: article }))
     .catch(next);
