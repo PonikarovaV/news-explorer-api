@@ -1,5 +1,6 @@
 
 const express = require('express');
+const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
@@ -32,6 +33,8 @@ const { MONGO_DB, SERV_PORT } = require('./utils/config');
 const app = express();
 
 app.use(helmet());
+
+app.use(cors());
 
 app.use(requestLogger);
 
