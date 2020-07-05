@@ -30,9 +30,16 @@ const auth = require('./middlewares/auth');
 
 const { MONGO_DB, SERV_PORT } = require('./utils/config');
 
+const corsOptions = {
+  origin: 'http://localhost:8080' || 'https://ponikarovav.github.io',
+  optionsSuccessStatus: 200,
+};
+
 const app = express();
 
 app.use(helmet());
+
+app.use(cors(corsOptions));
 
 app.use(requestLogger);
 
@@ -40,8 +47,6 @@ app.use(limiter);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(cors());
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
