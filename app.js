@@ -1,6 +1,5 @@
 
 const express = require('express');
-const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
@@ -30,16 +29,9 @@ const auth = require('./middlewares/auth');
 
 const { MONGO_DB, SERV_PORT } = require('./utils/config');
 
-const corsOptions = {
-  origin: 'http://localhost:8080' || 'https://ponikarovav.github.io',
-  optionsSuccessStatus: 200,
-};
-
 const app = express();
 
 app.use(helmet());
-
-app.use(cors(corsOptions));
 
 app.use(requestLogger);
 
