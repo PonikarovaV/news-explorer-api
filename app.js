@@ -30,6 +30,13 @@ const auth = require('./middlewares/auth');
 
 const { MONGO_DB, SERV_PORT } = require('./utils/config');
 
+const corsOptions = {
+  origin: true,
+  methods: ['GET'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  preflightContinue: true,
+};
+
 const app = express();
 
 app.use(cors());
@@ -59,7 +66,7 @@ app.post('/signup', celebrate({
 }), createUser);
 
 app.use(auth);
-app.options('/users', cors());
+app.options('/users', cors(corsOptions));
 app.use('/users', users);
 app.options('/articles', cors());
 app.use('/articles', articles);
