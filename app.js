@@ -59,7 +59,9 @@ app.post('/signup', celebrate({
 }), createUser);
 
 app.use(auth);
+app.options('/users', cors());
 app.use('/users', users);
+app.options('/articles', cors());
 app.use('/articles', articles);
 app.use(resource);
 app.use(errorLogger);
