@@ -34,9 +34,9 @@ const app = express();
 
 app.use(helmet());
 
-app.use('*', cors());
-
 app.use(requestLogger);
+
+app.use(cors());
 
 app.use(limiter);
 
