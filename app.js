@@ -32,11 +32,11 @@ const { MONGO_DB, SERV_PORT } = require('./utils/config');
 
 const app = express();
 
+app.use(cors());
+
 app.use(helmet());
 
 app.use(requestLogger);
-
-app.use(cors());
 
 app.use(limiter);
 
