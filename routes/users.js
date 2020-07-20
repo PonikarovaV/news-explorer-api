@@ -6,8 +6,8 @@ const { getUser } = require('../controllers/users');
 const corsOptions = {
   origin: true,
   methods: ['GET'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  preflightContinue: true,
+  // allowedHeaders: ['Content-Type', 'Authorization'],
+  // preflightContinue: true,
 };
 
 router.get('/me', cors(corsOptions), getUser);
